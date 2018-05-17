@@ -2,7 +2,7 @@ const Blockchain = require('./blockchain')
 const Block = require('./block')
 
 describe('Blockchain', () => {
-  let bc,bc2
+  let bc, bc2
 
   beforeEach(() => {
     bc = new Blockchain()
@@ -16,14 +16,13 @@ describe('Blockchain', () => {
   it('adds a new block', () => {
     const data = 'foo'
     bc.addBlock(data)
-    expect(bc.chain[bc.chain.length-1].data).toEqual(data)
+    expect(bc.chain[bc.chain.length - 1].data).toEqual(data)
   })
 
   it('validates a valid chain', () => {
-    bc2.addBlock({name: 'a object'})
+    bc2.addBlock({ name: 'a object' })
 
     expect(bc.isValidChain(bc2.chain)).toBeTruthy()
-    console.log(bc2.toString());
   })
 
   it('invalidates a chain with a corrupt genesis block', () => {
@@ -37,6 +36,23 @@ describe('Blockchain', () => {
     bc2.chain[1].data = 'Not foo'
 
     expect(bc.isValidChain(bc2.chain)).toBeFalsy()
+  })
+
+  it('replaces the chain with a valid chain.', () => {
+    bc2.addBlock('replacer')
+    bc.replaceChain(bc2.chain)
+
+    expect(bc.chain).toEqual(bc2.chain)
+  })
+
+  it('it not replace de chain with one of less than or equal to length', () => {
+    bc.addBlock('test')
+    bc.replaceChain(bc2.chain)
+
+    console.log(bc.toString())
+    
+    console.log(bc2.toString())
+    expect(bc.chain).not.toEqual(bc2.chain)
   })
 
   // it('', () => {
