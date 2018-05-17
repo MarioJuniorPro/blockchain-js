@@ -1,58 +1,34 @@
-const Blockchain = require('./blockchain')
-const Block = require('./block')
+const Block = require('./block');
 
-describe('Blockchain', () => {
-  let bc, bc2
+describe('Block', () => {
+  let data, lastBlock, block;
 
   beforeEach(() => {
-    bc = new Blockchain()
-    bc2 = new Blockchain()
-  })
+    data = 'bar';
+    lastBlock = Block.genesis();
+    block = Block.mineBlock(lastBlock, data);
+  });
 
-  it('starts with genesis block', () => {
-    expect(bc.chain[0]).toEqual(Block.genesis())
-  })
+  it('sets the `data` to match the input', () => {
+    expect(block.data).toEqual(data);
+  });
 
-  it('adds a new block', () => {
-    const data = 'foo'
-    bc.addBlock(data)
-    expect(bc.chain[bc.chain.length - 1].data).toEqual(data)
-  })
+  it('sets the `lastHash` to match the hash of the last block', () => {
+    expect(block.lastHash).toEqual(lastBlock.hash);
+  });
 
-  it('validates a valid chain', () => {
-    bc2.addBlock({ name: 'a object' })
+  it('generates a hash that matches the difficulty', () => {
+    expect(block.hash.substring(0, block.difficulty))
+      .toEqual('0'.repeat(block.difficulty));
+  });
 
-    expect(bc.isValidChain(bc2.chain)).toBeTruthy()
-  })
+  it('lowers the difficulty for slowly mined blocks', () => {
+    expect(Block.adjustDifficulty(block, block.timestamp+360000))
+      .toEqual(block.difficulty-1);
+  });
 
-  it('invalidates a chain with a corrupt genesis block', () => {
-    bc2.chain[0].data = 'Bad data'
-
-    expect(bc.isValidChain(bc2.chain)).toBeFalsy()
-  })
-
-  it('invalidates a corrupt chain', () => {
-    bc2.addBlock('foo')
-    bc2.chain[1].data = 'Not foo'
-
-    expect(bc.isValidChain(bc2.chain)).toBeFalsy()
-  })
-
-  it('replaces the chain with a valid chain.', () => {
-    bc2.addBlock('replacer')
-    bc.replaceChain(bc2.chain)
-
-    expect(bc.chain).toEqual(bc2.chain)
-  })
-
-  // it('it not replace de chain with one of less than or equal to length', () => {
-  //   bc.addBlock('test')
-  //   bc.replaceChain(bc2.chain)
-
-  //   expect(bc.chain).not.toEqual(bc2.chain)
-  // })
-
-  // it('', () => {
-
-  // })
-})
+  it('raises the difficulty for quickly mined blocks', () => {
+    expect(Block.adjustDifficulty(block, block.timestamp+1))
+      .toEqual(block.difficulty+1);
+  });
+});
