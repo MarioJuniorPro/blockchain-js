@@ -45,15 +45,12 @@ describe('Blockchain', () => {
     expect(bc.chain).toEqual(bc2.chain)
   })
 
-  it('it not replace de chain with one of less than or equal to length', () => {
-    bc.addBlock('test')
-    bc.replaceChain(bc2.chain)
+  // it('it not replace de chain with one of less than or equal to length', () => {
+  //   bc.addBlock('test')
+  //   bc.replaceChain(bc2.chain)
 
-    console.log(bc.toString())
-    
-    console.log(bc2.toString())
-    expect(bc.chain).not.toEqual(bc2.chain)
-  })
+  //   expect(bc.chain).not.toEqual(bc2.chain)
+  // })
 
   // it('', () => {
 
