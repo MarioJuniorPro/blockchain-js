@@ -1,7 +1,9 @@
-const DIFFICULTY = 2 // min 2
+const DIFFICULTY = 1 // min 2
 //BTC 600 * 1000
 const MINE_RATE = 5000
 
+const INITIAL_BALLANCE = 500
+
 module.exports = {
-  DIFFICULTY, MINE_RATE
+  DIFFICULTY, MINE_RATE, INITIAL_BALLANCE
 }
