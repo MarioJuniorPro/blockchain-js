@@ -1,4 +1,4 @@
-const DIFFICULTY = 1 // min 2
+const DIFFICULTY = 3 // min 2
 //BTC 600 * 1000
 const MINE_RATE = 5000
 

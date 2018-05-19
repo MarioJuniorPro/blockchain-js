@@ -1,4 +1,4 @@
-const SHA256 = require('crypto-js/sha256')
+const ChainUtil = require('../chain-util')
 const config = require('../config')
 const { DIFFICULTY, MINE_RATE } = config
 
@@ -32,20 +32,20 @@ class Block {
     let { difficulty } = lastBlock
     let nonce = 0
 
-    console.time(`Mining`)
+    // console.time(`Mining`)
     do {
       nonce++
       timestamp = Date.now()
       difficulty = Block.adjustDifficulty(lastBlock, timestamp)
       hash = Block.hash(timestamp, lastHash, data, nonce, difficulty)
     } while (hash.substring(0, difficulty) !== '0'.repeat(difficulty))
-    console.timeEnd(`Mining`)
+    // console.timeEnd(`Mining`)
 
     return new this(timestamp, lastHash, hash, data, nonce, difficulty)
   }
 
   static hash(timestamp, lastHash, data, nonce, difficulty) {
-    return SHA256(
+    return ChainUtil.hash(
       `${timestamp}${lastHash}${data}${nonce}${difficulty}`
     ).toString()
   }
